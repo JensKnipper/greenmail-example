@@ -66,15 +66,7 @@ public final class HomeController {
       @ModelAttribute NoteDto noteDto,
       BindingResult bindingResult,
       Model model) {
-    Optional<Note> note = noteRepository.getById(noteId);
-    if (note.isEmpty()) {
-      return "redirect:/note";
-    }
-    noteRepository.edit(
-        note.get().getId(),
-        note.get().getTitle(),
-        note.get().getText(),
-        note.get().getEmail()); // TODO edit funktioniert nicht
+    noteRepository.edit(noteId, noteDto.getTitle(), noteDto.getText(), noteDto.getEmail());
     return "redirect:/";
   }
 
