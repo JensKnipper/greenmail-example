@@ -23,8 +23,11 @@ class MailSendingHandlerTest {
 
   @Autowired private MailSendingHandler mailSendingHandler;
 
+  @Value("${mail.imap.port}")
+  private Integer imapPort;
+
   @Value("${spring.mail.port}")
-  private Integer port;
+  private Integer smtpPort;
 
   @Value("${spring.mail.username}")
   private String username;
@@ -34,7 +37,10 @@ class MailSendingHandlerTest {
 
   @Test
   public void testSend() throws MessagingException {
-    final GreenMail greenMail = new GreenMail(new ServerSetup(port, null, "smtp"));
+    final ServerSetup[] setup = {
+      new ServerSetup(imapPort, null, "imap"), new ServerSetup(smtpPort, null, "smtp")
+    };
+    final GreenMail greenMail = new GreenMail(setup);
     greenMail.setUser(username, password);
 
     final String recipient = GreenMailUtil.random();
