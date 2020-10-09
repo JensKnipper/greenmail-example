@@ -16,67 +16,81 @@ import java.util.Optional;
 
 @Controller
 public final class HomeController {
-    private final NoteRepository noteRepository;
-    private final NoteMailHandler noteMailHandler;
+  private final NoteRepository noteRepository;
+  private final NoteMailHandler noteMailHandler;
 
+  public HomeController(NoteRepository noteRepository, NoteMailHandler noteMailHandler) {
+    this.noteRepository = noteRepository;
+    this.noteMailHandler = noteMailHandler;
+  }
 
-    public HomeController(NoteRepository noteRepository, NoteMailHandler noteMailHandler) {
-        this.noteRepository = noteRepository;
-        this.noteMailHandler = noteMailHandler;
+  @GetMapping("/")
+  public String home(Model model) {
+    model.addAttribute("notes", noteRepository.getAll());
+    model.addAttribute("noteDto", new NoteDto());
+    return "home";
+  }
+
+  @GetMapping("/note")
+  public String createNote(Model model) {
+    model.addAttribute("noteDto", new NoteDto());
+    return "home";
+  }
+
+  @PostMapping("/note")
+  public String createNote(
+      @ModelAttribute NoteDto noteDto, BindingResult bindingResult, Model model) {
+    noteRepository.add(noteDto.getTitle(), noteDto.getText(), noteDto.getEmail());
+    return "redirect:/";
+  }
+
+  @GetMapping(value = "/note/{noteId}")
+  public String editNote(@PathVariable int noteId, Model model) {
+    Optional<Note> note = noteRepository.getById(noteId);
+    if (note.isEmpty()) {
+      return "redirect:/note";
     }
+    model.addAttribute(
+        "noteDto",
+        new NoteDto(
+            note.get().getId(),
+            note.get().getTitle(),
+            note.get().getText(),
+            note.get().getEmail()));
+    return "note";
+  }
 
-    @GetMapping("/")
-    public String home(Model model) {
-        model.addAttribute("notes", noteRepository.getAll());
-        model.addAttribute("noteDto", new NoteDto());
-        return "home";
+  @PostMapping(value = "/note/{noteId}")
+  public String editNote(
+      @PathVariable int noteId,
+      @ModelAttribute NoteDto noteDto,
+      BindingResult bindingResult,
+      Model model) {
+    Optional<Note> note = noteRepository.getById(noteId);
+    if (note.isEmpty()) {
+      return "redirect:/note";
     }
+    noteRepository.edit(
+        note.get().getId(),
+        note.get().getTitle(),
+        note.get().getText(),
+        note.get().getEmail()); // TODO edit funktioniert nicht
+    return "redirect:/";
+  }
 
-    @GetMapping("/note")
-    public String createNote(Model model) {
-        model.addAttribute("noteDto", new NoteDto());
-        return "home";
-    }
+  @GetMapping(value = "/note/{noteId}/delete")
+  public String deleteNote(@PathVariable int noteId, Model model) {
+    noteRepository.delete(noteId);
+    return "redirect:/";
+  }
 
-    @PostMapping("/note")
-    public String createNote(@ModelAttribute NoteDto noteDto, BindingResult bindingResult, Model model) {
-        noteRepository.add(noteDto.getTitle(), noteDto.getText(), noteDto.getEmail());
-        return "redirect:/";
+  @GetMapping(value = "/note/{noteId}/mail")
+  public String mailNote(@PathVariable int noteId, Model model) {
+    Optional<Note> note = noteRepository.getById(noteId);
+    if (note.isEmpty()) {
+      return "redirect:/";
     }
-
-    @GetMapping(value = "/note/{noteId}")
-    public String editNote(@PathVariable int noteId, Model model) {
-        Optional<Note> note = noteRepository.getById(noteId);
-        if (note.isEmpty()) {
-            return "redirect:/note";
-        }
-        model.addAttribute("noteDto", new NoteDto(note.get().getId(), note.get().getTitle(), note.get().getText(), note.get().getEmail()));
-        return "note";
-    }
-
-    @PostMapping(value = "/note/{noteId}")
-    public String editNote(@PathVariable int noteId, @ModelAttribute NoteDto noteDto, BindingResult bindingResult, Model model) {
-        Optional<Note> note = noteRepository.getById(noteId);
-        if (note.isEmpty()) {
-            return "redirect:/note";
-        }
-        noteRepository.edit(note.get().getId(), note.get().getTitle(), note.get().getText(), note.get().getEmail()); //TODO edit funktioniert nicht
-        return "redirect:/";
-    }
-
-    @GetMapping(value = "/note/{noteId}/delete")
-    public String deleteNote(@PathVariable int noteId, Model model) {
-        noteRepository.delete(noteId);
-        return "redirect:/";
-    }
-
-    @GetMapping(value = "/note/{noteId}/mail")
-    public String mailNote(@PathVariable int noteId, Model model) {
-        Optional<Note> note = noteRepository.getById(noteId);
-        if (note.isEmpty()) {
-            return "redirect:/";
-        }
-        noteMailHandler.send(note.get());
-        return "redirect:/";
-    }
+    noteMailHandler.send(note.get());
+    return "redirect:/";
+  }
 }
