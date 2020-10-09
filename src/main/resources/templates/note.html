@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Edit or create notes</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <span th:replace="fragments/general/css.html"></span>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-xl-6 col-lg-8 col-md-10 col-12 text-center">
+                <div class="row justify-content-center">
+                    <h1>Edit or create notes</h1>
+                </div>
+                <div class="row justify-content-center">
+                    <span th:replace="fragments/note-form.html"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <span th:replace="fragments/general/js.html"></span>
+</body>
+</html>
