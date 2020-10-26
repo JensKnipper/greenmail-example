@@ -23,7 +23,7 @@ Currently the test for receiving mail only seems to work on Windows and not on L
 * start up the docker dependencies: `docker-compose up -d`
 * run the application: `java -jar target/greenmail-example-0.0.1-SNAPSHOT.jar`
 
-### 
+### Usage
 * call `http://localhost:8080/` to access the application
 * call `http://localhost:8000/` to read and send emails locally
   * login with username and password - password is equal to username
