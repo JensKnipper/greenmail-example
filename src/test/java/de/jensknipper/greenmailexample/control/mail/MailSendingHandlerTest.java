@@ -8,6 +8,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.mail.Message;
@@ -16,12 +17,17 @@ import javax.mail.MessagingException;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-// @ActiveProfiles("test") // in an active working environment you might set a profile for
-// integration testing
+@ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 class MailSendingHandlerTest {
 
   @Autowired private MailSendingHandler mailSendingHandler;
+
+  @Value("${mail.imap.host}")
+  private String imapHost;
+
+  @Value("${spring.mail.host}")
+  private String smtpHost;
 
   @Value("${mail.imap.port}")
   private Integer imapPort;
@@ -38,7 +44,8 @@ class MailSendingHandlerTest {
   @Test
   public void testSend() throws MessagingException {
     final ServerSetup[] setup = {
-      new ServerSetup(imapPort, null, "imap"), new ServerSetup(smtpPort, null, "smtp")
+      new ServerSetup(imapPort, imapHost, "imap"),
+      new ServerSetup(smtpPort, smtpHost, "smtp")
     };
     final GreenMail greenMail = new GreenMail(setup);
     greenMail.setUser(username, password);
@@ -52,7 +59,7 @@ class MailSendingHandlerTest {
     mailSendingHandler.send(recipient, subject, text);
 
     assertThat(greenMail.waitForIncomingEmail(5000, 1)).isTrue();
-    Message[] messages = greenMail.getReceivedMessages();
+    final Message[] messages = greenMail.getReceivedMessages();
     greenMail.stop();
 
     assertThat(messages.length).isEqualTo(1);

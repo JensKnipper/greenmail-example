@@ -1,6 +1,5 @@
 package de.jensknipper.greenmailexample.control.mail;
 
-import com.icegreen.greenmail.user.GreenMailUser;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
 import com.icegreen.greenmail.util.ServerSetup;
@@ -10,23 +9,25 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-// @ActiveProfiles("test") // in an active working environment you might set a profile for
-// integration testing
+@ActiveProfiles("test")
 @RunWith(SpringRunner.class)
 class MailReceivingHandlerTest {
 
   @Autowired private MailReceivingHandler mailReceivingHandler;
+
+  @Value("${mail.imap.host}")
+  private String imapHost;
+
+  @Value("${spring.mail.host}")
+  private String smtpHost;
 
   @Value("${mail.imap.port}")
   private Integer imapPort;
@@ -41,9 +42,10 @@ class MailReceivingHandlerTest {
   private String password;
 
   @Test
-  public void testSend() throws MessagingException {
+  public void testSend() {
     final ServerSetup[] setup = {
-      new ServerSetup(imapPort, null, "imap"), new ServerSetup(smtpPort, null, "smtp")
+      new ServerSetup(imapPort, imapHost, "imap"),
+      new ServerSetup(smtpPort, smtpHost, "smtp")
     };
     final GreenMail greenMail = new GreenMail(setup);
     greenMail.setUser(username, password);

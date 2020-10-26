@@ -2,8 +2,6 @@ package de.jensknipper.greenmailexample.control.mail.mapper;
 
 import de.jensknipper.greenmailexample.control.mail.model.Mail;
 import org.owasp.encoder.Encode;
-import org.owasp.encoder.Encoder;
-import org.owasp.encoder.Encoders;
 
 import javax.mail.Address;
 import javax.mail.Message;
