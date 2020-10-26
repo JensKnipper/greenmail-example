@@ -60,6 +60,8 @@ class MailReceivingHandlerTest {
     final List<Mail> mails = mailReceivingHandler.receive();
 
     assertThat(mails).isNotEmpty();
+    assertThat(mails.get(0).getSubject()).isEqualTo(subject);
+    assertThat(mails.get(0).getContent()).isEqualTo(text);
 
     greenMail.stop();
   }

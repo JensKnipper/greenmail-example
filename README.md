@@ -14,7 +14,7 @@ Mail sending and receiving is tested with integration tests using GreenMail.
 
 Please do not use the code for receiving mail as an example. 
 I had no idea how to do it properly and the application is only intended to be a showcase for GreenMail.  
-Currently the test for receiving mail only seems to work on Windows and not on Linux. I will further investigate in this.
+Currently receiving mails does not work with changed ports, that is why you have to turn off the GreenMail docker container before executing the tests.
 
 ## Running the application
 
