@@ -8,17 +8,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class MailReceivingScheduler {
 
-  private final MailReceivingHandler mailReceivingHandler;
-  private final NoteMailHandler noteMailHandler;
+    private final MailReceivingHandler mailReceivingHandler;
+    private final NoteMailHandler noteMailHandler;
 
-  public MailReceivingScheduler(
-      MailReceivingHandler mailReceivingHandler, NoteMailHandler noteMailHandler) {
-    this.mailReceivingHandler = mailReceivingHandler;
-    this.noteMailHandler = noteMailHandler;
-  }
+    public MailReceivingScheduler(
+            MailReceivingHandler mailReceivingHandler, NoteMailHandler noteMailHandler) {
+        this.mailReceivingHandler = mailReceivingHandler;
+        this.noteMailHandler = noteMailHandler;
+    }
 
-  @Scheduled(fixedRate = 3000)
-  public void receiveAndSaveNotes() {
-    mailReceivingHandler.receive().forEach(noteMailHandler::receive);
-  }
+    @Scheduled(fixedRate = 3000)
+    public void receiveAndSaveNotes() {
+        mailReceivingHandler.receive().forEach(noteMailHandler::receive);
+    }
 }

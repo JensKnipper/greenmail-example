@@ -2,55 +2,57 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Your Notes</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <span th:replace="fragments/general/css.html"></span>
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row justify-content-center">
-            <div class="col-xl-6 col-lg-8 col-md-10 col-12 text-center">
-                <div class="row justify-content-center">
-                    <h1>Your Notes</h1>
-                </div>
-                <div class="row">
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col"> ID </th>
-                            <th scope="col"> Title </th>
-                            <th scope="col"> Text </th>
-                            <th scope="col"> E-Mail </th>
-                            <th scope="col"> Actions </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:if="${notes.empty}">
-                            <td colspan="6"> No Notes Available </td>
-                        </tr>
-                        <tr th:each="note: ${notes}">
-                            <td scope="row"><span th:text="${note.id}"> ID </span></td>
-                            <td><span th:text="${note.title}"> Title </span></td>
-                            <td><span th:text="${note.text}"> Text </span></td>
-                            <td><span th:text="${note.email}"> E-Mail </span></td>
-                            <td>
-                                <div class="btn-group btn-group-sm" role="group" aria-label="Actions">
-                                    <span> <a class="btn btn-secondary" th:href="@{/note/{id}(id=${note.id})}"> Edit </a> </span>
-                                    <span> <a class="btn btn-secondary" th:href="@{/note/{id}/delete(id=${note.id})}"> Delete </a> </span>
-                                    <span> <a class="btn btn-secondary" th:href="@{/note/{id}/mail(id=${note.id})}"> Mail </a> </span>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="row justify-content-center">
-                    <span th:replace="fragments/note-form.html"></span>
-                </div>
+<div class="container-fluid">
+    <div class="row justify-content-center">
+        <div class="col-xl-6 col-lg-8 col-md-10 col-12 text-center">
+            <div class="row justify-content-center">
+                <h1>Your Notes</h1>
+            </div>
+            <div class="row">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col"> ID</th>
+                        <th scope="col"> Title</th>
+                        <th scope="col"> Text</th>
+                        <th scope="col"> E-Mail</th>
+                        <th scope="col"> Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${notes.empty}">
+                        <td colspan="6"> No Notes Available</td>
+                    </tr>
+                    <tr th:each="note: ${notes}">
+                        <td scope="row"><span th:text="${note.id}"> ID </span></td>
+                        <td><span th:text="${note.title}"> Title </span></td>
+                        <td><span th:text="${note.text}"> Text </span></td>
+                        <td><span th:text="${note.email}"> E-Mail </span></td>
+                        <td>
+                            <div class="btn-group btn-group-sm" role="group" aria-label="Actions">
+                                <span> <a class="btn btn-secondary"
+                                          th:href="@{/note/{id}(id=${note.id})}"> Edit </a> </span>
+                                <span> <a class="btn btn-secondary" th:href="@{/note/{id}/delete(id=${note.id})}"> Delete </a> </span>
+                                <span> <a class="btn btn-secondary"
+                                          th:href="@{/note/{id}/mail(id=${note.id})}"> Mail </a> </span>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row justify-content-center">
+                <span th:replace="fragments/note-form.html"></span>
             </div>
         </div>
     </div>
+</div>
 
 
-    <span th:replace="fragments/general/js.html"></span>
+<span th:replace="fragments/general/js.html"></span>
 </body>
 </html>

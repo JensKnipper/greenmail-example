@@ -21,48 +21,51 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 class MailReceivingHandlerTest {
 
-  @Autowired private MailReceivingHandler mailReceivingHandler;
+    @Autowired
+    private MailReceivingHandler mailReceivingHandler;
 
-  @Value("${mail.imap.host}")
-  private String imapHost;
+    @Value("${mail.store.host}")
+    private String storeHost;
 
-  @Value("${spring.mail.host}")
-  private String smtpHost;
+    @Value("${spring.mail.host}")
+    private String smtpHost;
 
-  @Value("${mail.imap.port}")
-  private Integer imapPort;
+    @Value("${mail.store.port}")
+    private Integer storePort;
 
-  @Value("${spring.mail.port}")
-  private Integer smtpPort;
+    @Value("${spring.mail.port}")
+    private Integer smtpPort;
 
-  @Value("${spring.mail.username}")
-  private String username;
+    @Value("${spring.mail.username}")
+    private String username;
 
-  @Value("${spring.mail.password}")
-  private String password;
+    @Value("${spring.mail.password}")
+    private String password;
 
-  @Test
-  public void testSend() {
-    final ServerSetup[] setup = {
-      new ServerSetup(imapPort, imapHost, "imap"),
-      new ServerSetup(smtpPort, smtpHost, "smtp")
-    };
-    final GreenMail greenMail = new GreenMail(setup);
-    greenMail.setUser(username, password);
+    @Test
+    public void testReceive() {
+        final ServerSetup imapSetup = new ServerSetup(storePort, storeHost, "imap");
+        final ServerSetup smtpSetup = new ServerSetup(smtpPort, smtpHost, "smtp");
 
-    greenMail.start();
+        final ServerSetup[] setup = {
+                imapSetup, smtpSetup
+        };
+        final GreenMail greenMail = new GreenMail(setup);
+        greenMail.setUser(username, password);
 
-    final String sender = GreenMailUtil.random();
-    final String subject = GreenMailUtil.random();
-    final String text = GreenMailUtil.random();
-    GreenMailUtil.sendTextEmailTest(username, sender, subject, text);
+        greenMail.start();
 
-    final List<Mail> mails = mailReceivingHandler.receive();
+        final String sender = GreenMailUtil.random();
+        final String subject = GreenMailUtil.random();
+        final String text = GreenMailUtil.random();
+        GreenMailUtil.sendTextEmail(username, sender, subject, text, smtpSetup);
 
-    assertThat(mails).isNotEmpty();
-    assertThat(mails.get(0).getSubject()).isEqualTo(subject);
-    assertThat(mails.get(0).getContent()).isEqualTo(text);
+        final List<Mail> mails = mailReceivingHandler.receive();
 
-    greenMail.stop();
-  }
+        assertThat(mails).isNotEmpty();
+        assertThat(mails.get(0).getSubject()).isEqualTo(subject);
+        assertThat(mails.get(0).getContent()).isEqualTo(text);
+
+        greenMail.stop();
+    }
 }

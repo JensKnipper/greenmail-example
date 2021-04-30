@@ -8,21 +8,21 @@ import org.springframework.stereotype.Component;
 @Component
 public final class MailSendingHandler {
 
-  @Value("${spring.mail.username}")
-  private String mailUser;
+    @Value("${spring.mail.username}")
+    private String user;
 
-  private final JavaMailSenderImpl javaMailSender;
+    private final JavaMailSenderImpl javaMailSender;
 
-  public MailSendingHandler(JavaMailSenderImpl javaMailSender) {
-    this.javaMailSender = javaMailSender;
-  }
+    public MailSendingHandler(JavaMailSenderImpl javaMailSender) {
+        this.javaMailSender = javaMailSender;
+    }
 
-  public void send(String recipient, String subject, String text) {
-    SimpleMailMessage message = new SimpleMailMessage();
-    message.setFrom(mailUser);
-    message.setTo(recipient);
-    message.setSubject(subject);
-    message.setText(text);
-    javaMailSender.send(message);
-  }
+    public void send(String recipient, String subject, String text) {
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setFrom(user);
+        message.setTo(recipient);
+        message.setSubject(subject);
+        message.setText(text);
+        javaMailSender.send(message);
+    }
 }

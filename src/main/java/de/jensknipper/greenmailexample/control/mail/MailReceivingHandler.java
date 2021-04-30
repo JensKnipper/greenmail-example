@@ -3,13 +3,10 @@ package de.jensknipper.greenmailexample.control.mail;
 import de.jensknipper.greenmailexample.control.mail.mapper.MailMapper;
 import de.jensknipper.greenmailexample.control.mail.model.Mail;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.mail.*;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
@@ -17,82 +14,70 @@ import java.util.stream.Collectors;
 @Component
 public final class MailReceivingHandler {
 
-  private final String protocol;
-  private final String imapHost;
-  private final Integer imapPort;
-  private final String mailUser;
-  private final String mailUserPassword;
+    @Value("${mail.store.protocol}")
+    private String protocol;
 
-  private Store emailStore;
-  private Folder emailFolder;
+    @Value("${mail.store.host}")
+    private String host;
 
-  public MailReceivingHandler(Environment env) {
-    protocol = env.getProperty("mail.store.protocol");
-    imapHost = env.getProperty("mail.imap.host");
-    imapPort = Integer.parseInt(env.getProperty("mail.imap.port"));
-    mailUser = env.getProperty("spring.mail.username");
-    mailUserPassword = env.getProperty("spring.mail.password");
-  }
+    @Value("${mail.store.port}")
+    private String port;
 
-  public List<Mail> receive() {
-    try {
-      initMailStore();
-      initMailFolder();
+    @Value("${spring.mail.username}")
+    private String user;
 
-      List<Mail> mails = getNewMails();
+    @Value("${spring.mail.password}")
+    private String password;
 
-      if (emailFolder.isOpen()) {
-        emailFolder.close(false);
-      }
-      if (emailStore.isConnected()) {
-        emailStore.close();
-      }
+    public List<Mail> receive() {
+        Store emailStore = null;
+        Folder emailFolder = null;
 
-      return mails;
+        try {
+            Properties properties = new Properties();
+            properties.put("mail.imap.host", host);
+            properties.put("mail.imap.port", port);
+            properties.put("mail.store.protocol", protocol);
+            Session emailSession = Session.getDefaultInstance(properties);
+            emailStore = emailSession.getStore();
+            emailStore.connect(user, password);
 
-    } catch (MessagingException e) {
-      e.printStackTrace();
+            emailFolder = emailStore.getFolder("INBOX");
+            emailFolder.open(Folder.READ_WRITE);
+
+            return getNewMails(emailFolder);
+
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if (emailFolder != null && emailFolder.isOpen()) {
+                    emailFolder.close(false);
+                }
+                if (emailStore != null && emailStore.isConnected()) {
+                    emailStore.close();
+                }
+            } catch (MessagingException e) {
+                throw new RuntimeException(e);
+            }
+        }
     }
-    return Collections.emptyList();
-  }
 
-  private void initMailStore() throws MessagingException {
-    if (emailStore == null) {
-      Properties properties = new Properties();
-      properties.put("mail.imap.host", imapHost);
-      properties.put("mail.store.protocol", protocol);
-      Session emailSession = Session.getDefaultInstance(properties);
-      emailStore = emailSession.getStore();
+    private List<Mail> getNewMails(Folder emailFolder) throws MessagingException {
+        List<Mail> mails =
+                Arrays.stream(emailFolder.getMessages())
+                        .filter(
+                                it -> {
+                                    try {
+                                        return !it.getFlags().contains(Flags.Flag.SEEN);
+                                    } catch (MessagingException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return false;
+                                })
+                        .map(MailMapper::map)
+                        .collect(Collectors.toList());
+        emailFolder.setFlags(1, emailFolder.getMessageCount(), new Flags(Flags.Flag.SEEN), true);
+        return mails;
     }
-    if (!emailStore.isConnected()) {
-      emailStore.connect(imapHost, imapPort, mailUser, mailUserPassword);
-    }
-  }
-
-  private void initMailFolder() throws MessagingException {
-    if (emailFolder == null) {
-      emailFolder = emailStore.getFolder("INBOX");
-    }
-    if (!emailFolder.isOpen()) {
-      emailFolder.open(Folder.READ_WRITE);
-    }
-  }
-
-  private List<Mail> getNewMails() throws MessagingException {
-    List<Mail> mails =
-        Arrays.stream(emailFolder.getMessages())
-            .filter(
-                it -> {
-                  try {
-                    return !it.getFlags().contains(Flags.Flag.SEEN);
-                  } catch (MessagingException e) {
-                    e.printStackTrace();
-                  }
-                  return false;
-                })
-            .map(it -> new MailMapper().map(it))
-            .collect(Collectors.toList());
-    emailFolder.setFlags(1, emailFolder.getMessageCount(), new Flags(Flags.Flag.SEEN), true);
-    return mails;
-  }
 }

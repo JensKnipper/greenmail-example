@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication
 public class GreenmailExampleApplication {
 
-  public static void main(String[] args) {
-    SpringApplication.run(GreenmailExampleApplication.class, args);
-  }
+    public static void main(String[] args) {
+        SpringApplication.run(GreenmailExampleApplication.class, args);
+    }
 }

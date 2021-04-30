@@ -10,45 +10,48 @@ import java.io.IOException;
 
 public final class MailMapper {
 
-  public Mail map(Message message) {
-    String subject = Encode.forHtml(getSubject(message));
-    String content = Encode.forHtml(getContent(message));
-    String from = Encode.forHtml(getFrom(message));
-    return new Mail(subject, content, from);
-  }
-
-  private String getSubject(Message message) {
-    try {
-      return message.getSubject();
-    } catch (MessagingException e) {
-      e.printStackTrace();
+    private MailMapper() {
     }
-    return null;
-  }
 
-  private String getContent(Message message) {
-    try {
-      Object content = message.getContent();
-      if (content == null) {
+    public static Mail map(Message message) {
+        String subject = Encode.forHtml(getSubject(message));
+        String content = Encode.forHtml(getContent(message));
+        String from = Encode.forHtml(getFrom(message));
+        return new Mail(subject, content, from);
+    }
+
+    private static String getSubject(Message message) {
+        try {
+            return message.getSubject();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
         return null;
-      }
-      return content.toString();
-    } catch (IOException | MessagingException e) {
-      e.printStackTrace();
     }
-    return null;
-  }
 
-  private String getFrom(Message message) {
-    try {
-      Address[] from = message.getFrom();
-      if (from.length == 0 || from[0] == null) {
+    private static String getContent(Message message) {
+        try {
+            Object content = message.getContent();
+            if (content == null) {
+                return null;
+            }
+            return content.toString();
+        } catch (IOException | MessagingException e) {
+            e.printStackTrace();
+        }
         return null;
-      }
-      return from[0].toString();
-    } catch (MessagingException e) {
-      e.printStackTrace();
     }
-    return null;
-  }
+
+    private static String getFrom(Message message) {
+        try {
+            Address[] from = message.getFrom();
+            if (from.length == 0 || from[0] == null) {
+                return null;
+            }
+            return from[0].toString();
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

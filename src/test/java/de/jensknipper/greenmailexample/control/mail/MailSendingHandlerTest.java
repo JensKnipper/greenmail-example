@@ -23,13 +23,13 @@ class MailSendingHandlerTest {
 
   @Autowired private MailSendingHandler mailSendingHandler;
 
-  @Value("${mail.imap.host}")
+  @Value("${mail.store.host}")
   private String imapHost;
 
   @Value("${spring.mail.host}")
   private String smtpHost;
 
-  @Value("${mail.imap.port}")
+  @Value("${mail.store.port}")
   private Integer imapPort;
 
   @Value("${spring.mail.port}")
