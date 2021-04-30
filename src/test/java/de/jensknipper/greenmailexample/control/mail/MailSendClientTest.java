@@ -3,6 +3,7 @@ package de.jensknipper.greenmailexample.control.mail;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
 import com.icegreen.greenmail.util.ServerSetup;
+import de.jensknipper.greenmailexample.control.mail.send.MailSendClient;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
-class MailSendingHandlerTest {
+class MailSendClientTest {
 
-  @Autowired private MailSendingHandler mailSendingHandler;
+  @Autowired private MailSendClient mailSendClient;
 
   @Value("${mail.store.host}")
   private String imapHost;
@@ -56,7 +57,7 @@ class MailSendingHandlerTest {
 
     greenMail.start();
 
-    mailSendingHandler.send(recipient, subject, text);
+    mailSendClient.send(recipient, subject, text);
 
     assertThat(greenMail.waitForIncomingEmail(5000, 1)).isTrue();
     final Message[] messages = greenMail.getReceivedMessages();

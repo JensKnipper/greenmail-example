@@ -2,24 +2,16 @@
 
 ## About
 
-This small example application was planned to be shown in a talk at my employers - [OVSoftware](https://ovsoftware.de/) - internal conference.
-Due to the current Corona situation the conference was cancelled.
-Still I would like to share the results of my research.
-
 This is an example application in which you can create notes and send them via mail.
 Notes can also be created by incoming mails to the address specified in the `application.config` file.
-All the mails will remail local due to [GreenMail](https://greenmail-mail-test.github.io/greenmail/) running in the background as a mock SMTP server.
+All the mails will remain local due to [GreenMail](https://greenmail-mail-test.github.io/greenmail/) running in the background as a mock SMTP server.
 You can use the included [RoundCube](https://roundcube.net/) instance to read and send mails.
 Mail sending and receiving is tested with integration tests using GreenMail.
-
-Please do not use the code for receiving mail as an example. 
-I had no idea how to do it properly and the application is only intended to be a showcase for GreenMail.  
-Currently receiving mails does not work with changed ports, that is why you have to turn off the GreenMail docker container before executing the tests.
 
 ## Running the application
 
 ### Setup 
-* create the application: `mvn clean package`
+* create the application: `mvn package`
 * start up the docker dependencies: `docker-compose up -d`
 * run the application: `java -jar target/greenmail-example-0.0.1-SNAPSHOT.jar`
 
@@ -31,4 +23,4 @@ Currently receiving mails does not work with changed ports, that is why you have
   
 ## Thanks
 
-I would like to thank my employer [OVSoftware](https://ovsoftware.de/) for allowing me to publish the results of my research.
+I would like to thank my former employer [OVSoftware](https://ovsoftware.de/) and my current employer [OpenValue](https://openvalue.de/) for allowing me to publish the results of my research.

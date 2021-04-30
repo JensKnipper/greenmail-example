@@ -1,4 +1,4 @@
-package de.jensknipper.greenmailexample.control.mail;
+package de.jensknipper.greenmailexample.control.mail.receive;
 
 import de.jensknipper.greenmailexample.control.mail.mapper.MailMapper;
 import de.jensknipper.greenmailexample.control.mail.model.Mail;
@@ -12,7 +12,7 @@ import java.util.Properties;
 import java.util.stream.Collectors;
 
 @Component
-public final class MailReceivingHandler {
+public final class MailReceiveClient {
 
     @Value("${mail.store.protocol}")
     private String protocol;

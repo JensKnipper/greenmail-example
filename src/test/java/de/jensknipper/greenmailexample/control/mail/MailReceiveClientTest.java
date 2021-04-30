@@ -4,6 +4,7 @@ import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
 import com.icegreen.greenmail.util.ServerSetup;
 import de.jensknipper.greenmailexample.control.mail.model.Mail;
+import de.jensknipper.greenmailexample.control.mail.receive.MailReceiveClient;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,10 +20,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @ActiveProfiles("test")
 @RunWith(SpringRunner.class)
-class MailReceivingHandlerTest {
+class MailReceiveClientTest {
 
     @Autowired
-    private MailReceivingHandler mailReceivingHandler;
+    private MailReceiveClient mailReceiveClient;
 
     @Value("${mail.store.host}")
     private String storeHost;
@@ -46,7 +47,6 @@ class MailReceivingHandlerTest {
     public void testReceive() {
         final ServerSetup imapSetup = new ServerSetup(storePort, storeHost, "imap");
         final ServerSetup smtpSetup = new ServerSetup(smtpPort, smtpHost, "smtp");
-
         final ServerSetup[] setup = {
                 imapSetup, smtpSetup
         };
@@ -60,7 +60,7 @@ class MailReceivingHandlerTest {
         final String text = GreenMailUtil.random();
         GreenMailUtil.sendTextEmail(username, sender, subject, text, smtpSetup);
 
-        final List<Mail> mails = mailReceivingHandler.receive();
+        final List<Mail> mails = mailReceiveClient.receive();
 
         assertThat(mails).isNotEmpty();
         assertThat(mails.get(0).getSubject()).isEqualTo(subject);
