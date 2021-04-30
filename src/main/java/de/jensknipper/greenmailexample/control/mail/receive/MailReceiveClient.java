@@ -1,7 +1,7 @@
 package de.jensknipper.greenmailexample.control.mail.receive;
 
 import de.jensknipper.greenmailexample.control.mail.mapper.MailMapper;
-import de.jensknipper.greenmailexample.control.mail.model.Mail;
+import de.jensknipper.greenmailexample.model.Mail;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

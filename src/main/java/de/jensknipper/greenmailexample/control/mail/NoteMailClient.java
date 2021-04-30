@@ -1,8 +1,8 @@
 package de.jensknipper.greenmailexample.control.mail;
 
-import de.jensknipper.greenmailexample.control.mail.model.Mail;
 import de.jensknipper.greenmailexample.control.mail.send.MailSendClient;
 import de.jensknipper.greenmailexample.control.persistence.NoteRepository;
+import de.jensknipper.greenmailexample.model.Mail;
 import de.jensknipper.greenmailexample.model.Note;
 import org.springframework.stereotype.Service;
 

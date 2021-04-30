@@ -1,4 +1,4 @@
-package de.jensknipper.greenmailexample.control.mail.model;
+package de.jensknipper.greenmailexample.model;
 
 public final class Mail {
     private final String subject;

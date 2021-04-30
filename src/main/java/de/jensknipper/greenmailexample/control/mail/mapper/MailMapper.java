@@ -1,6 +1,6 @@
 package de.jensknipper.greenmailexample.control.mail.mapper;
 
-import de.jensknipper.greenmailexample.control.mail.model.Mail;
+import de.jensknipper.greenmailexample.model.Mail;
 import org.owasp.encoder.Encode;
 
 import javax.mail.Address;
@@ -24,9 +24,8 @@ public final class MailMapper {
         try {
             return message.getSubject();
         } catch (MessagingException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     private static String getContent(Message message) {
@@ -37,9 +36,8 @@ public final class MailMapper {
             }
             return content.toString();
         } catch (IOException | MessagingException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return null;
     }
 
     private static String getFrom(Message message) {
@@ -50,8 +48,7 @@ public final class MailMapper {
             }
             return from[0].toString();
         } catch (MessagingException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return null;
     }
 }

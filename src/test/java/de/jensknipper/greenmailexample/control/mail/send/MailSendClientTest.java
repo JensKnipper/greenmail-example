@@ -1,9 +1,8 @@
-package de.jensknipper.greenmailexample.control.mail;
+package de.jensknipper.greenmailexample.control.mail.send;
 
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
 import com.icegreen.greenmail.util.ServerSetup;
-import de.jensknipper.greenmailexample.control.mail.send.MailSendClient;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
