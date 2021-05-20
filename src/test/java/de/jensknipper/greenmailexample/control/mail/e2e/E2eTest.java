@@ -30,6 +30,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 @ActiveProfiles("test")
 public class E2eTest {
 
+    private static final String EXAMPLE_MAIL_ADDRESS = "mail@example.com";
+    private static final String EXAMPLE_NOTE_TITLE = "title123";
+    private static final String EXAMPLE_NOTE_TEXT = "text123";
+
     @Value("${mail.store.host}")
     private String storeHost;
 
@@ -85,7 +89,7 @@ public class E2eTest {
 
     @Test
     public void sendingAMailShouldCreateANote() throws InterruptedException {
-        GreenMailUtil.sendTextEmail(username, "mail@example.com", "title123", "text123", smtpSetup);
+        GreenMailUtil.sendTextEmail(username, EXAMPLE_MAIL_ADDRESS, EXAMPLE_NOTE_TITLE, EXAMPLE_NOTE_TEXT, smtpSetup);
 
         // wait until scheduler picks up mail
         Thread.sleep(3100);
@@ -94,9 +98,9 @@ public class E2eTest {
 
         new WebDriverWait(driver, 5).until(it -> it.getTitle().startsWith("Your Notes"));
 
-        assertThat(driver.getPageSource().contains("mail@example.com")).isTrue();
-        assertThat(driver.getPageSource().contains("title123")).isTrue();
-        assertThat(driver.getPageSource().contains("text123")).isTrue();
+        assertThat(driver.getPageSource().contains(EXAMPLE_MAIL_ADDRESS)).isTrue();
+        assertThat(driver.getPageSource().contains(EXAMPLE_NOTE_TITLE)).isTrue();
+        assertThat(driver.getPageSource().contains(EXAMPLE_NOTE_TEXT)).isTrue();
     }
 
     @Test
@@ -107,16 +111,20 @@ public class E2eTest {
         new WebDriverWait(driver, 5).until(it -> it.getPageSource().contains("No Notes Available"));
 
         WebElement titleField = driver.findElement(By.id("title"));
-        titleField.sendKeys("title123");
+        titleField.sendKeys(EXAMPLE_NOTE_TITLE);
         WebElement textField = driver.findElement(By.id("text"));
-        textField.sendKeys("text123");
+        textField.sendKeys(EXAMPLE_NOTE_TEXT);
         WebElement mailField = driver.findElement(By.id("email"));
-        mailField.sendKeys("mail@example.com");
+        mailField.sendKeys(EXAMPLE_MAIL_ADDRESS);
 
         WebElement submitButton = driver.findElement(By.id("submit"));
         submitButton.click();
 
         new WebDriverWait(driver, 5).until(it -> it.getTitle().startsWith("Your Notes"));
+
+        assertThat(driver.getPageSource().contains(EXAMPLE_MAIL_ADDRESS)).isTrue();
+        assertThat(driver.getPageSource().contains(EXAMPLE_NOTE_TITLE)).isTrue();
+        assertThat(driver.getPageSource().contains(EXAMPLE_NOTE_TEXT)).isTrue();
 
         WebElement mailSendButton = driver.findElement(By.id("mail-send-0"));
         mailSendButton.click();
@@ -125,7 +133,7 @@ public class E2eTest {
         final Message[] messages = greenMail.getReceivedMessages();
 
         assertThat(messages.length).isEqualTo(1);
-        assertThat(messages[0].getSubject()).isEqualTo("title123");
-        assertThat(GreenMailUtil.getBody(messages[0]).trim()).isEqualTo("text123");
+        assertThat(messages[0].getSubject()).isEqualTo(EXAMPLE_NOTE_TITLE);
+        assertThat(GreenMailUtil.getBody(messages[0]).trim()).isEqualTo(EXAMPLE_NOTE_TEXT);
     }
 }
