@@ -35,6 +35,8 @@ Mail sending and receiving is tested with integration tests using GreenMail.
 * include glyphicons to improve styling
 * test for changing imap/pop3 via integration test
 * test mail read/unread feature via integration test
+* assert recipient and sender in GreenMail tests
+* scheduler delay in properties and in ui test
 
 ## Thanks
 

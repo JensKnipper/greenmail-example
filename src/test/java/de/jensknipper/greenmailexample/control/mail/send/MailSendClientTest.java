@@ -24,13 +24,13 @@ class MailSendClientTest {
   @Autowired private MailSendClient mailSendClient;
 
   @Value("${mail.store.host}")
-  private String imapHost;
+  private String storeHost;
 
   @Value("${spring.mail.host}")
   private String smtpHost;
 
   @Value("${mail.store.port}")
-  private Integer imapPort;
+  private Integer storePort;
 
   @Value("${spring.mail.port}")
   private Integer smtpPort;
@@ -44,26 +44,25 @@ class MailSendClientTest {
   @Test
   public void testSend() throws MessagingException {
     final ServerSetup[] setup = {
-      new ServerSetup(imapPort, imapHost, "imap"),
+      new ServerSetup(storePort, storeHost, "imap"),
       new ServerSetup(smtpPort, smtpHost, "smtp")
     };
     final GreenMail greenMail = new GreenMail(setup);
     greenMail.setUser(username, password);
+    greenMail.start();
 
     final String recipient = GreenMailUtil.random();
     final String subject = GreenMailUtil.random();
     final String text = GreenMailUtil.random();
-
-    greenMail.start();
-
     mailSendClient.send(recipient, subject, text);
 
     assertThat(greenMail.waitForIncomingEmail(5000, 1)).isTrue();
     final Message[] messages = greenMail.getReceivedMessages();
-    greenMail.stop();
 
     assertThat(messages.length).isEqualTo(1);
     assertThat(messages[0].getSubject()).isEqualTo(subject);
     assertThat(GreenMailUtil.getBody(messages[0]).trim()).isEqualTo(text);
+
+    greenMail.stop();
   }
 }

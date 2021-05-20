@@ -44,14 +44,13 @@ class MailReceiveClientTest {
 
     @Test
     public void testReceive() {
-        final ServerSetup imapSetup = new ServerSetup(storePort, storeHost, "imap");
+        final ServerSetup storeSetup = new ServerSetup(storePort, storeHost, "imap");
         final ServerSetup smtpSetup = new ServerSetup(smtpPort, smtpHost, "smtp");
         final ServerSetup[] setup = {
-                imapSetup, smtpSetup
+                storeSetup, smtpSetup
         };
         final GreenMail greenMail = new GreenMail(setup);
         greenMail.setUser(username, password);
-
         greenMail.start();
 
         final String sender = GreenMailUtil.random();

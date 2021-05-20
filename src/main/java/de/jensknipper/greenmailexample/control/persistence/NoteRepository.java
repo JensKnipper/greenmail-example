@@ -44,7 +44,7 @@ public final class NoteRepository {
                 .collect(Collectors.toList());
     }
 
-    public void deleteAll(int id) {
+    public void deleteAll() {
         noteRepo.clear();
         maxId = 0;
     }
