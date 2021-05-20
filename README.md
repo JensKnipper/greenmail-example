@@ -28,15 +28,14 @@ Mail sending and receiving is tested with integration tests using GreenMail.
 * update dependencies
 * unit test emails
   * include templating engine?
-* ui tests
-  * include selenium and testcontainers?
 * edit notes by sending mails
 * random ports for tests
 * include glyphicons to improve styling
 * test for changing imap/pop3 via integration test
 * test mail read/unread feature via integration test
 * assert recipient and sender in GreenMail tests
-* scheduler delay in properties and in ui test
+* scheduler delay in properties and in e2e test
+* make e2e tests runnable on all OS variants - testcontainers?
 
 ## Thanks
 

@@ -1,4 +1,4 @@
-package de.jensknipper.greenmailexample.control.mail.ui;
+package de.jensknipper.greenmailexample.control.mail.e2e;
 
 import com.icegreen.greenmail.store.FolderException;
 import com.icegreen.greenmail.util.GreenMail;
@@ -28,7 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles("test")
-public class UiTest {
+public class E2eTest {
 
     @Value("${mail.store.host}")
     private String storeHost;
