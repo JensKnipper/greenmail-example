@@ -35,12 +35,21 @@
                         <td>
                             <div class="btn-group btn-group-sm" role="group" aria-label="Actions">
                                 <span><a class="btn btn-secondary"
-                                         th:href="@{/note/{id}(id=${note.id})}">Edit</a></span>
+                                         th:href="@{/note/{id}(id=${note.id})}">
+                                    <i class="far fa-edit"></i>
+                                    Edit
+                                </a></span>
                                 <span><a class="btn btn-secondary"
-                                         th:href="@{/note/{id}/delete(id=${note.id})}">Delete</a></span>
+                                         th:href="@{/note/{id}/delete(id=${note.id})}">
+                                    <i class="far fa-trash-alt"></i>
+                                    Delete</a>
+                                </span>
                                 <span><a class="btn btn-secondary"
                                          th:id="'mail-send-' + ${note.id}"
-                                         th:href="@{/note/{id}/mail(id=${note.id})}">Mail</a></span>
+                                         th:href="@{/note/{id}/mail(id=${note.id})}">
+                                    <i class="far fa-envelope"></i>
+                                    Mail
+                                </a></span>
                             </div>
                         </td>
                     </tr>
