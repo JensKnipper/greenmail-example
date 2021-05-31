@@ -29,6 +29,9 @@ class MailSendClientTest {
   @Value("${spring.mail.host}")
   private String smtpHost;
 
+  @Value("${mail.store.protocol}")
+  private String storeProtocol;
+
   @Value("${mail.store.port}")
   private Integer storePort;
 
@@ -44,7 +47,7 @@ class MailSendClientTest {
   @Test
   public void testSend() throws MessagingException {
     final ServerSetup[] setup = {
-      new ServerSetup(storePort, storeHost, "imap"),
+      new ServerSetup(storePort, storeHost, storeProtocol),
       new ServerSetup(smtpPort, smtpHost, "smtp")
     };
     final GreenMail greenMail = new GreenMail(setup);

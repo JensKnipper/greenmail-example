@@ -30,6 +30,9 @@ class MailReceiveClientTest {
     @Value("${spring.mail.host}")
     private String smtpHost;
 
+    @Value("${mail.store.protocol}")
+    private String storeProtocol;
+
     @Value("${mail.store.port}")
     private Integer storePort;
 
@@ -44,7 +47,7 @@ class MailReceiveClientTest {
 
     @Test
     public void testReceive() {
-        final ServerSetup storeSetup = new ServerSetup(storePort, storeHost, "imap");
+        final ServerSetup storeSetup = new ServerSetup(storePort, storeHost, storeProtocol);
         final ServerSetup smtpSetup = new ServerSetup(smtpPort, smtpHost, "smtp");
         final ServerSetup[] setup = {
                 storeSetup, smtpSetup

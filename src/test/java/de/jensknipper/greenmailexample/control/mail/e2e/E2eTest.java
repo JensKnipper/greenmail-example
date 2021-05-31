@@ -40,6 +40,9 @@ public class E2eTest {
     @Value("${spring.mail.host}")
     private String smtpHost;
 
+    @Value("${mail.store.protocol}")
+    private String storeProtocol;
+
     @Value("${mail.store.port}")
     private Integer storePort;
 
@@ -51,6 +54,9 @@ public class E2eTest {
 
     @Value("${spring.mail.password}")
     private String password;
+
+    @Value("${mail.receive.schedule.interval.milliseconds}")
+    private Integer schedulerInterval;
 
     @Autowired
     private NoteRepository noteRepository;
@@ -64,7 +70,7 @@ public class E2eTest {
 
     @BeforeEach
     public void setup() throws FolderException {
-        ServerSetup storeSetup = new ServerSetup(storePort, storeHost, "imap");
+        ServerSetup storeSetup = new ServerSetup(storePort, storeHost, storeProtocol);
         smtpSetup = new ServerSetup(smtpPort, smtpHost, "smtp");
         final ServerSetup[] setup = {
                 storeSetup, smtpSetup
@@ -92,7 +98,7 @@ public class E2eTest {
         GreenMailUtil.sendTextEmail(username, EXAMPLE_MAIL_ADDRESS, EXAMPLE_NOTE_TITLE, EXAMPLE_NOTE_TEXT, smtpSetup);
 
         // wait until scheduler picks up mail
-        Thread.sleep(3100);
+        Thread.sleep(schedulerInterval + 100);
 
         driver.get("localhost:" + port);
 

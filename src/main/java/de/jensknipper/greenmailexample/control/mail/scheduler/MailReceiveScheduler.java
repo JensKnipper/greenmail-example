@@ -17,7 +17,7 @@ public class MailReceiveScheduler {
         this.noteMailClient = noteMailClient;
     }
 
-    @Scheduled(fixedRate = 3000)
+    @Scheduled(fixedRateString = "${mail.receive.schedule.interval.milliseconds}")
     public void receiveAndSaveNotes() {
         mailReceiveClient.receive().forEach(noteMailClient::receive);
     }
