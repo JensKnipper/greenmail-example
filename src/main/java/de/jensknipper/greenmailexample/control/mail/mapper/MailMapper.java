@@ -7,17 +7,19 @@ import javax.mail.Address;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import java.io.IOException;
+import java.util.Arrays;
 
 public final class MailMapper {
 
     private MailMapper() {
     }
 
-    public static Mail map(Message message) {
+    public static Mail map(Message message, String user) {
         String subject = Encode.forHtml(getSubject(message));
         String content = Encode.forHtml(getContent(message));
         String from = Encode.forHtml(getFrom(message));
-        return new Mail(subject, content, from);
+        String recipient = Encode.forHtml(getRecipient(message, user));
+        return new Mail(subject, content, from, recipient);
     }
 
     private static String getSubject(Message message) {
@@ -47,6 +49,18 @@ public final class MailMapper {
                 return null;
             }
             return from[0].toString();
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static String getRecipient(Message message, String user) {
+        try {
+            return Arrays.stream(message.getAllRecipients())
+                    .map(Address::toString)
+                    .filter(it -> it.startsWith(user))
+                    .findFirst()
+                    .orElse(user);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }

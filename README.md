@@ -8,6 +8,15 @@ All the mails will remain local due to [GreenMail](https://greenmail-mail-test.g
 You can use the included [RoundCube](https://roundcube.net/) instance to read and send mails.
 Mail sending and receiving is tested with integration tests using GreenMail.
 
+### Further reading
+
+I held a talk about testing email notifications.
+This application is used for demonstration purposes in this talk.
+You can watch the talk online on [my website](https://jensknipper.de/blog/openvalue-meetup-greenmail-talk/).
+
+I wrote a detailed article about the dev setup with GreenMail.
+The results can be read in [this article](https://jensknipper.de/blog/greenmail-mock-mail-server-dev-setup/).
+
 ## Running the application
 
 ### Setup 
@@ -28,11 +37,9 @@ Mail sending and receiving is tested with integration tests using GreenMail.
 * unit test emails
   * include templating engine?
 * edit notes by sending mails
-* random ports for tests
-* test for changing imap/pop3 via integration test
-* test mail read/unread feature via integration test
-* assert recipient and sender in GreenMail tests
+* random ports for e2e tests
 * make e2e tests runnable on all OS variants - testcontainers? - selenium standalone?
+* test for html and attachment mails
 
 ## Thanks
 

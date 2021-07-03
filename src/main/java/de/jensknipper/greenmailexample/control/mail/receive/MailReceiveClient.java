@@ -40,7 +40,7 @@ public final class MailReceiveClient {
         properties.put("mail.store.protocol", protocol);
         properties.put("mail." + protocol + ".host", host);
         properties.put("mail." + protocol + ".port", port);
-        Session emailSession = Session.getDefaultInstance(properties);
+        Session emailSession = Session.getInstance(properties);
 
         try {
             emailStore = emailSession.getStore();
@@ -79,7 +79,7 @@ public final class MailReceiveClient {
                                     }
                                     return false;
                                 })
-                        .map(MailMapper::map)
+                        .map(it -> MailMapper.map(it, user))
                         .collect(Collectors.toList());
         emailFolder.setFlags(1, emailFolder.getMessageCount(), new Flags(Flags.Flag.SEEN), true);
         return mails;
