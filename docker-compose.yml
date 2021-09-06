@@ -2,9 +2,9 @@ version: '3'
 
 services:
   greenmail:
-    image: "greenmail/standalone"
+    image: greenmail/standalone:latest
     environment:
-      - JAVA_OPTS=-Dgreenmail.verbose -Dgreenmail.users=foo:password@example.com
+      - JAVA_OPTS=-Dgreenmail.verbose
     ports:
       - 3025:3025 # SMTP
       - 3110:3110 # POP3
@@ -12,23 +12,16 @@ services:
       - 3465:3465 # SMTPS
       - 3993:3993 # IMAPS
       - 3995:3995 # POP3S
-    networks:
-      - greenmail-net
+      - 8080:8080 # API
 
   roundcube:
-    image: roundcube/roundcubemail
+    image: roundcube/roundcubemail:latest
     depends_on:
       - greenmail
     ports:
       - 8000:80
-      - 9000:9000
     environment:
-      - ROUNDCUBEMAIL_DEFAULT_HOST=greenmail  # IMAP server - tls:// prefix for STARTTLS
+      - ROUNDCUBEMAIL_DEFAULT_HOST=greenmail  # IMAP server - tls:// prefix for STARTTLS, ssl:// for SSL/TLS
       - ROUNDCUBEMAIL_DEFAULT_PORT=3143       # IMAP port
-      - ROUNDCUBEMAIL_SMTP_SERVER=greenmail   # SMTP server - tls:// prefix for STARTTLS
+      - ROUNDCUBEMAIL_SMTP_SERVER=greenmail   # SMTP server - tls:// prefix for STARTTLS, ssl:// for SSL/TLS
       - ROUNDCUBEMAIL_SMTP_PORT=3025          # SMTP port
-    networks:
-      - greenmail-net
-
-networks:
-  greenmail-net:
