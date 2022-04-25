@@ -12,7 +12,7 @@ services:
       - 3465:3465 # SMTPS
       - 3993:3993 # IMAPS
       - 3995:3995 # POP3S
-      - 8080:8080 # API
+      - 8081:8080 # API
 
   roundcube:
     image: roundcube/roundcubemail:latest

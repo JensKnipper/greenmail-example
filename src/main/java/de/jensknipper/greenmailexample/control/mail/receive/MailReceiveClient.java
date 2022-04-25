@@ -6,10 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.mail.*;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 @Component
 public final class MailReceiveClient {
@@ -68,20 +67,14 @@ public final class MailReceiveClient {
     }
 
     private List<Mail> getNewMails(Folder emailFolder) throws MessagingException {
-        List<Mail> mails =
-                Arrays.stream(emailFolder.getMessages())
-                        .filter(
-                                it -> {
-                                    try {
-                                        return !it.getFlags().contains(Flags.Flag.SEEN);
-                                    } catch (MessagingException e) {
-                                        e.printStackTrace();
-                                    }
-                                    return false;
-                                })
-                        .map(it -> MailMapper.map(it, user))
-                        .collect(Collectors.toList());
-        emailFolder.setFlags(1, emailFolder.getMessageCount(), new Flags(Flags.Flag.SEEN), true);
+        List<Mail> mails = new ArrayList<>();
+        for (Message message : emailFolder.getMessages()) {
+            if (!message.getFlags().contains(Flags.Flag.SEEN)) {
+                message.setFlags(new Flags(Flags.Flag.SEEN), true);
+                Mail mail = MailMapper.map(message, user);
+                mails.add(mail);
+            }
+        }
         return mails;
     }
 }
