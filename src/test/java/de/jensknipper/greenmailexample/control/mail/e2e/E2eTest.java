@@ -105,7 +105,7 @@ public class E2eTest {
 
         driver.get("localhost:" + port);
 
-        new WebDriverWait(driver, 5).until(it -> it.getTitle().startsWith("Your Notes"));
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(it -> it.getTitle().startsWith("Your Notes"));
 
         assertThat(driver.getPageSource().contains(EXAMPLE_MAIL_ADDRESS)).isTrue();
         assertThat(driver.getPageSource().contains(EXAMPLE_NOTE_TITLE)).isTrue();
@@ -117,7 +117,7 @@ public class E2eTest {
 
         driver.get("localhost:" + port);
 
-        new WebDriverWait(driver, 5).until(it -> it.getPageSource().contains("No Notes Available"));
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(it -> it.getPageSource().contains("No Notes Available"));
 
         WebElement titleField = driver.findElement(By.id("title"));
         titleField.sendKeys(EXAMPLE_NOTE_TITLE);
@@ -129,7 +129,7 @@ public class E2eTest {
         WebElement submitButton = driver.findElement(By.id("submit"));
         submitButton.click();
 
-        new WebDriverWait(driver, 5).until(it -> it.getTitle().startsWith("Your Notes"));
+        new WebDriverWait(driver, Duration.ofSeconds(5)).until(it -> it.getTitle().startsWith("Your Notes"));
 
         assertThat(driver.getPageSource().contains(EXAMPLE_MAIL_ADDRESS)).isTrue();
         assertThat(driver.getPageSource().contains(EXAMPLE_NOTE_TITLE)).isTrue();
