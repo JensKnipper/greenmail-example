@@ -19,11 +19,17 @@ The results can be read in [this article](https://jensknipper.de/blog/greenmail-
 
 ## Running the application
 
-### Setup 
+### Setup
 
-* create the application: `mvn package`
 * start up the docker dependencies: `docker-compose up -d`
-* run the application: `java -jar target/greenmail-example-0.0.1-SNAPSHOT.jar`
+* run the application: `./mvnw spring-boot:run`
+
+#### Prerequisites
+
+* the following programmes are required on your machine
+  * docker
+  * docker-compose
+  * firefox (for testing only)
 
 ### Usage
 
