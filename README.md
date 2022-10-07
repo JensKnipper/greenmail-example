@@ -38,7 +38,6 @@ The results can be read in [this article](https://jensknipper.de/blog/greenmail-
   * include templating engine?
 * edit notes by sending mails
 * random ports for e2e tests
-* make e2e tests runnable on all OS variants - testcontainers? - selenium standalone?
 * test for html and attachment mails
 
 ## Thanks

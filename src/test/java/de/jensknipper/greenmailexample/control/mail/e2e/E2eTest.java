@@ -4,6 +4,7 @@ import com.icegreen.greenmail.store.FolderException;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
 import com.icegreen.greenmail.util.ServerSetup;
+import de.jensknipper.greenmailexample.control.mail.util.DriverSelector;
 import de.jensknipper.greenmailexample.control.persistence.NoteRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,13 +18,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.test.context.ActiveProfiles;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
+import java.time.Duration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -80,11 +80,8 @@ public class E2eTest {
         greenMail.setUser(username, password);
         greenMail.start();
 
-        Path path = FileSystems.getDefault().getPath("src/test/resources/geckodriver.exe");
-        System.setProperty("webdriver.gecko.driver", path.toString());
-        FirefoxOptions options = new FirefoxOptions();
-        options.addArguments("--headless");
-        driver = new FirefoxDriver(options);
+        System.setProperty("webdriver.gecko.driver", DriverSelector.getDriver().toString());
+        driver = new FirefoxDriver(new FirefoxOptions().setHeadless(true));
 
         greenMail.purgeEmailFromAllMailboxes();
         noteRepository.deleteAll();
