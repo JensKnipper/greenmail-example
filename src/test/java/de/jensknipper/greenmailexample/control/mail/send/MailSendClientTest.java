@@ -9,40 +9,39 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.util.SocketUtils;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@SpringBootTest
-@ActiveProfiles("test")
-@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
 class MailSendClientTest {
 
   @Autowired private MailSendClient mailSendClient;
 
-  @Value("${mail.store.host}")
-  private String storeHost;
+  private static final String storeHost = "localhost";
+  private static final String smtpHost= "localhost";
+  private static final String storeProtocol = "imap";
+  private static final int storePort= SocketUtils.findAvailableTcpPort();
+  private static final  int smtpPort= SocketUtils.findAvailableTcpPort();
+  private static final  String username ="username";
+  private static final  String password ="password";
 
-  @Value("${spring.mail.host}")
-  private String smtpHost;
-
-  @Value("${mail.store.protocol}")
-  private String storeProtocol;
-
-  @Value("${mail.store.port}")
-  private Integer storePort;
-
-  @Value("${spring.mail.port}")
-  private Integer smtpPort;
-
-  @Value("${spring.mail.username}")
-  private String username;
-
-  @Value("${spring.mail.password}")
-  private String password;
+  @DynamicPropertySource
+  static void registerProperties(final DynamicPropertyRegistry registry) {
+    registry.add("mail.store.host", () -> storeHost);
+    registry.add("spring.mail.host", () -> smtpHost);
+    registry.add("mail.store.protocol", () -> storeProtocol);
+    registry.add("mail.store.port", () -> storePort);
+    registry.add("spring.mail.port", () -> smtpPort);
+    registry.add("spring.mail.username", () -> username);
+    registry.add("spring.mail.password", () -> password);
+  }
 
   @Test
   public void testSend() throws MessagingException {

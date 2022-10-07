@@ -37,7 +37,6 @@ The results can be read in [this article](https://jensknipper.de/blog/greenmail-
 * unit test emails
   * include templating engine?
 * edit notes by sending mails
-* random ports for e2e tests
 * test for html and attachment mails
 
 ## Thanks

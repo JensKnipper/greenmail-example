@@ -5,6 +5,7 @@ import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
 import com.icegreen.greenmail.util.ServerSetup;
 import de.jensknipper.greenmailexample.model.Mail;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -41,13 +42,18 @@ class MailReceiveClientTest {
     private static final GreenMail greenMail = new GreenMail(setups);
 
     @BeforeAll
-    static void setUpAll() {
+    static void beforeAll() {
         greenMail.setUser(username, password);
         greenMail.start();
     }
 
+    @AfterAll
+    static void afterAll() {
+        greenMail.stop();
+    }
+
     @AfterEach
-    void cleanUp() throws FolderException {
+    void afterEach() throws FolderException {
         greenMail.purgeEmailFromAllMailboxes();
     }
 
