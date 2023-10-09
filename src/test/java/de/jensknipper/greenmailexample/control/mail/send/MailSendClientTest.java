@@ -3,19 +3,15 @@ package de.jensknipper.greenmailexample.control.mail.send;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
 import com.icegreen.greenmail.util.ServerSetup;
+import de.jensknipper.greenmailexample.control.mail.util.PortUtil;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.SocketUtils;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,12 +21,12 @@ class MailSendClientTest {
   @Autowired private MailSendClient mailSendClient;
 
   private static final String storeHost = "localhost";
-  private static final String smtpHost= "localhost";
+  private static final String smtpHost = "localhost";
   private static final String storeProtocol = "imap";
-  private static final int storePort= SocketUtils.findAvailableTcpPort();
-  private static final  int smtpPort= SocketUtils.findAvailableTcpPort();
-  private static final  String username ="username";
-  private static final  String password ="password";
+  private static final int storePort = PortUtil.findRandomOpenPort();
+  private static final int smtpPort = PortUtil.findRandomOpenPort();
+  private static final String username = "username";
+  private static final String password = "password";
 
   @DynamicPropertySource
   static void registerProperties(final DynamicPropertyRegistry registry) {
@@ -59,7 +55,7 @@ class MailSendClientTest {
     mailSendClient.send(recipient, subject, text);
 
     assertThat(greenMail.waitForIncomingEmail(5000, 1)).isTrue();
-    final Message[] messages = greenMail.getReceivedMessages();
+    final MimeMessage[] messages = greenMail.getReceivedMessages();
 
     assertThat(messages.length).isEqualTo(1);
     assertThat(messages[0].getSubject()).isEqualTo(subject);

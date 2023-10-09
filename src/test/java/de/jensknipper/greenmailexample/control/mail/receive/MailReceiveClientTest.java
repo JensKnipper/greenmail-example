@@ -4,12 +4,12 @@ import com.icegreen.greenmail.store.FolderException;
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.GreenMailUtil;
 import com.icegreen.greenmail.util.ServerSetup;
+import de.jensknipper.greenmailexample.control.mail.util.PortUtil;
 import de.jensknipper.greenmailexample.model.Mail;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import org.springframework.util.SocketUtils;
 
 import java.util.List;
 
@@ -20,13 +20,13 @@ class MailReceiveClientTest {
     private static final String host = "localhost";
 
     private static final String smtpProtocol = "smtp";
-    private static final int smtpPort = SocketUtils.findAvailableTcpPort();
+    private static final int smtpPort = PortUtil.findRandomOpenPort();
 
     private static final String popProtocol = "pop3";
-    private static final int popPort = SocketUtils.findAvailableTcpPort();
+    private static final int popPort = PortUtil.findRandomOpenPort();
 
     private static final String imapProtocol = "imap";
-    private static final int imapPort = SocketUtils.findAvailableTcpPort();
+    private static final int imapPort = PortUtil.findRandomOpenPort();
 
     private static final String username = "username@example.com";
     private static final String password = "password";

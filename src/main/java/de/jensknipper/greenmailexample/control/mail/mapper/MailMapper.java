@@ -1,11 +1,11 @@
 package de.jensknipper.greenmailexample.control.mail.mapper;
 
 import de.jensknipper.greenmailexample.model.Mail;
+import jakarta.mail.Address;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
 import org.owasp.encoder.Encode;
 
-import javax.mail.Address;
-import javax.mail.Message;
-import javax.mail.MessagingException;
 import java.io.IOException;
 import java.util.Arrays;
 
