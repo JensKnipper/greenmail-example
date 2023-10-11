@@ -6,22 +6,37 @@ services:
     environment:
       - JAVA_OPTS=-Dgreenmail.verbose
     ports:
-      - 3025:3025 # SMTP
-      - 3110:3110 # POP3
-      - 3143:3143 # IMAP
-      - 3465:3465 # SMTPS
-      - 3993:3993 # IMAPS
-      - 3995:3995 # POP3S
-      - 8081:8080 # API
+      - "3025:3025" # SMTP
+      - "3110:3110" # POP3
+      - "3143:3143" # IMAP
+      - "3465:3465" # SMTPS
+      - "3993:3993" # IMAPS
+      - "3995:3995" # POP3S
+      - "8081:8080" # API
 
   roundcube:
     image: roundcube/roundcubemail:latest
     depends_on:
       - greenmail
     ports:
-      - 8000:80
+      - "8000:80"
     environment:
       - ROUNDCUBEMAIL_DEFAULT_HOST=greenmail  # IMAP server - tls:// prefix for STARTTLS, ssl:// for SSL/TLS
       - ROUNDCUBEMAIL_DEFAULT_PORT=3143       # IMAP port
       - ROUNDCUBEMAIL_SMTP_SERVER=greenmail   # SMTP server - tls:// prefix for STARTTLS, ssl:// for SSL/TLS
       - ROUNDCUBEMAIL_SMTP_PORT=3025          # SMTP port
+
+  grafana:
+    image: grafana/grafana
+    ports:
+      - "3000:3000"
+    environment:
+      - "GF_SMTP_ENABLED=true"
+      - "GF_SMTP_SERVER=greenmail"
+      - "GF_SMTP_HOST=greenmail:3025"
+      - "GF_SMTP_PORT=3025"
+      - "GF_SMTP_USER="
+      - "GF_SMTP_PASSWORD="
+      - "GF_SMTP_FROM_ADDRESS=foo@example.com"
+      - "GF_SMTP_SKIP_VERIFY=true"
+      - "GF_SMTP_EHLO_IDENTITY=mail.example.com"
